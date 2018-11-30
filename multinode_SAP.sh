@@ -208,10 +208,12 @@ chmod +x start_multinode.sh
 chmod +x stop_multinode.sh
 chmod +x mn_status.sh
 chmod +x mn_getinfo.sh
+chmod +x mn_sync_block.sh
 cat start_multinode.sh >> /usr/local/bin/start_multinode.sh
 cat stop_multinode.sh >> /usr/local/bin/stop_multinode.sh
 cat mn_getinfo.sh >> /usr/local/bin/mn_getinfo.sh
 cat mn_status.sh >> /usr/local/bin/mn_status.sh
+cat mn_sync_block.sh >> /usr/local/bin/mn_sync_block.sh
 chown -R sap:sap /home/sap/multinode
 chmod -R g=u /home/sap/multinode
 
