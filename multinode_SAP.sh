@@ -148,58 +148,58 @@ fi
 echo "* Creating masternode directories"
 mkdir -p "$BASE"/multinode
 for NUM in $(seq 1 ${count}); do
-    if [ ! -d "$BASE"/multinode/SAP_"${NUM}" ]; then
-        echo "creating data directory $BASE/multinode/SAP_${NUM}" 
-        mkdir -p "$BASE"/multinode/SAP_"${NUM}" 
-		#Generating Random Password for Shekel/Jew JSON RPC
-		USER=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-		USERPASS=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
-		read -e -p "MasterNode Key for SAP_"${NUM}": " MKey
-		echo "rpcallowip=127.0.0.1
-	rpcuser=$USER
-	rpcpassword=$USERPASS
-	server=1
-	daemon=1
-	listen=1
-	maxconnections=256
-	masternode=1
-	masternodeprivkey=$MKey
-	promode=1
-	addnode=188.240.24.236
-	addnode=60.51.32.209
-	addnode=206.189.104.231
-	addnode=80.211.143.148
-	addnode=202.182.109.8
-	addnode=199.247.21.147	
-	addnode=209.250.251.243
-	addnode=45.76.61.85
-	addnode=45.77.179.151
-	addnode=185.30.238.122
-	addnode=95.216.156.83
-	addnode=62.75.206.169
-	addnode=84.131.180.166" |sudo tee -a "$BASE"/multinode/SAP_"${NUM}"/shekel.conf >/dev/null
-	echo 'bind=192.168.1.'"${NUM}"':'"$PORT" >> "$BASE"/multinode/SAP_"${NUM}"/shekel.conf
-	echo 'rpcport=8119'"${NUM}" >> "$BASE"/multinode/SAP_"${NUM}"/shekel.conf
+if [ ! -d "$BASE"/multinode/SAP_"${NUM}" ]; then
+    echo "creating data directory $BASE/multinode/SAP_${NUM}" 
+    mkdir -p "$BASE"/multinode/SAP_"${NUM}" 
+	#Generating Random Password for Shekel/Jew JSON RPC
+	USER=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+	USERPASS=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+	read -e -p "MasterNode Key for SAP_"${NUM}": " MKey
+	echo "rpcallowip=127.0.0.1
+rpcuser=$USER
+rpcpassword=$USERPASS
+server=1
+daemon=1
+listen=1
+maxconnections=256
+masternode=1
+masternodeprivkey=$MKey
+promode=1
+addnode=188.240.24.236
+addnode=60.51.32.209
+addnode=206.189.104.231
+addnode=80.211.143.148
+addnode=202.182.109.8
+addnode=199.247.21.147	
+addnode=209.250.251.243
+addnode=45.76.61.85
+addnode=45.77.179.151
+addnode=185.30.238.122
+addnode=95.216.156.83
+addnode=62.75.206.169
+addnode=84.131.180.166" |sudo tee -a "$BASE"/multinode/SAP_"${NUM}"/shekel.conf >/dev/null
+echo 'bind=192.168.1.'"${NUM}"':'"$PORT" >> "$BASE"/multinode/SAP_"${NUM}"/shekel.conf
+echo 'rpcport=8119'"${NUM}" >> "$BASE"/multinode/SAP_"${NUM}"/shekel.conf
 
-	echo 'ip addr del 192.168.1.'"${NUM}"'/32 dev '"$dev2"':'"${NUM}" >> start_multinode.sh
-	echo 'ip addr add 192.168.1.'"${NUM}"'/32 dev '"$dev2"':'"${NUM}" >> start_multinode.sh
-	echo "runuser -l sap -c 'shekeld -daemon -pid=$BASE/multinode/SAP_${NUM}/shekel.pid -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM}'" >> start_multinode.sh
+echo 'ip addr del 192.168.1.'"${NUM}"'/32 dev '"$dev2"':'"${NUM}" >> start_multinode.sh
+echo 'ip addr add 192.168.1.'"${NUM}"'/32 dev '"$dev2"':'"${NUM}" >> start_multinode.sh
+echo "runuser -l sap -c 'shekeld -daemon -pid=$BASE/multinode/SAP_${NUM}/shekel.pid -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM}'" >> start_multinode.sh
 
-	echo 'ip addr del 192.168.1.'"${NUM}"'/32 dev '"$dev2"':'"${NUM}" >> stop_multinode.sh
-	echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} stop" >> stop_multinode.sh
+echo 'ip addr del 192.168.1.'"${NUM}"'/32 dev '"$dev2"':'"${NUM}" >> stop_multinode.sh
+echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} stop" >> stop_multinode.sh
 
-	echo "echo '====================================================${NUM}========================================================================'" >> mn_status.sh
-	echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} masternode status" >> mn_status.sh
+echo "echo '====================================================${NUM}========================================================================'" >> mn_status.sh
+echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} masternode status" >> mn_status.sh
 
-	echo "echo '====================================================${NUM}========================================================================'" >> mn_getinfo.sh
-	echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} getinfo" >> mn_getinfo.sh
+echo "echo '====================================================${NUM}========================================================================'" >> mn_getinfo.sh
+echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} getinfo" >> mn_getinfo.sh
 	
-	echo "echo 'stop MN${NUM}'"
-	echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} stop" >> mn_sync_block.sh
-	if (( ${NUM} > 1)) ; then
-		echo "echo 'copy MN1 blocks folder into masternode ${NUM}'" >> mn_sync_block.sh
-		echo "sudo yes | cp -R $BASE/multinode/SAP_1/blocks $BASE/multinode/SAP_${NUM}/blocks" >> mn_sync_block.sh
-	fi
+echo "echo 'stop MN${NUM}'" >> mn_sync_block.sh
+echo "shekel-cli -conf=$BASE/multinode/SAP_${NUM}/shekel.conf -datadir=$BASE/multinode/SAP_${NUM} stop" >> mn_sync_block.sh
+if (( $NUM > 1)) ; then
+	echo "echo 'copy MN1 blocks folder into masternode ${NUM}'" >> mn_sync_block.sh
+	echo "yes | cp -R $BASE/multinode/SAP_1/blocks $BASE/multinode/SAP_${NUM}/blocks" >> mn_sync_block.sh
+fi
 
 fi
 done
@@ -217,10 +217,9 @@ cat mn_sync_block.sh >> /usr/local/bin/mn_sync_block.sh
 chown -R sap:sap /home/sap/multinode
 chmod -R g=u /home/sap/multinode
 
-echo "@reboot ~root/BTAD-multi-masternode/start_multinode.sh" >> /etc/cron.d/shekalnodes
+echo "@reboot ~root/start_multinode.sh" >> /etc/cron.d/shekalnodes
 
-ip addr add 192.168.1.'"1"'/32 dev '"venet0"':'"1"
-runuser -l sap -c 'shekeld -daemon -pid=$BASE/multinode/SAP_1/shekel.pid -conf=$BASE/multinode/SAP_1/shekel.conf -datadir=$BASE/multinode/SAP_1'
+runuser -l sap -c 'shekeld -daemon -pid=/home/sap/multinode/SAP_1/shekel.pid -conf=/home/sap/multinode/SAP_1/shekel.conf -datadir=/home/sap/multinode/SAP_1'
 
 echo 'run start_multinode.sh to start the multinode'
 echo 'run stop_multinode.sh to stop it'
